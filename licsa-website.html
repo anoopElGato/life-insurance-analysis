@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LICSA — Life Insurance Content Strategy Agent</title>
+<meta name="description" content="Paste a competitor's content or name a topic. LICSA reads the file and returns the trending signals, content to make, and campaigns to run.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== Tokens ===== */
+:root{
+  --paper: #EAE6D8;
+  --paper-deep: #DFDAC4;
+  --panel: #F3F0E5;
+  --ink: #1C2B39;
+  --ink-soft: #4E606F;
+  --ink-faint: #7C8894;
+  --gold: #B8862B;
+  --gold-deep: #8F681E;
+  --red: #A13D2B;
+  --teal: #2F5D56;
+  --line: #C6BFA9;
+  --line-strong: #1C2B39;
+
+  --font-display: "Fraunces", serif;
+  --font-body: "IBM Plex Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  --radius: 3px;
+  --wrap: 1120px;
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+body{
+  margin:0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap{
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+a{ color: inherit; }
+
+/* subtle paper grain */
+.grain{
+  position: fixed; inset:0; pointer-events:none; z-index: 2000;
+  opacity: .045; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== Header ===== */
+.site-header{
+  position: sticky; top:0; z-index: 500;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.header-inner{
+  display:flex; align-items:center; justify-content: space-between;
+  padding-top: 16px; padding-bottom: 16px; gap: 20px;
+}
+.brand{ display:flex; flex-direction:column; line-height:1.1; }
+.brand-mark{
+  font-family: var(--font-mono); font-weight:600; letter-spacing: .12em;
+  font-size: 1.05rem; color: var(--ink);
+}
+.brand-mark-dot{ color: var(--red); }
+.brand-tag{
+  font-size: .68rem; letter-spacing: .04em; color: var(--ink-faint); margin-top: 2px;
+}
+.header-nav{ display:flex; gap: 28px; font-size: .88rem; }
+.header-nav a{ text-decoration:none; color: var(--ink-soft); border-bottom: 1px solid transparent; padding-bottom: 2px; transition: color .15s, border-color .15s; }
+.header-nav a:hover{ color: var(--ink); border-color: var(--gold); }
+.header-stamp{
+  font-family: var(--font-mono); font-size: .62rem; letter-spacing: .1em;
+  border: 1px solid var(--teal); color: var(--teal);
+  padding: 5px 10px; border-radius: var(--radius);
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  transform: rotate(-2deg);
+}
+.header-stamp span{ font-weight:600; font-size: .72rem; }
+
+@media (max-width: 780px){
+  .header-nav{ display:none; }
+}
+
+/* ===== Hero ===== */
+.hero{ padding: 72px 28px 40px; }
+.hero-eyebrow{
+  display:flex; align-items:center; gap: 14px;
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em;
+  color: var(--ink-soft); margin-bottom: 26px; flex-wrap: wrap;
+}
+.case-no{ color: var(--red); }
+.rule{ width: 40px; height:1px; background: var(--line-strong); display:inline-block; }
+
+.hero-title{
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  line-height: 1.04;
+  margin: 0 0 28px;
+  max-width: 14ch;
+  letter-spacing: -0.01em;
+}
+.hero-title em{ font-style: italic; color: var(--red); font-weight: 500; }
+
+.hero-sub{
+  max-width: 620px;
+  font-size: 1.08rem;
+  color: var(--ink-soft);
+  margin: 0 0 34px;
+}
+
+.hero-actions{ display:flex; gap: 14px; flex-wrap: wrap; margin-bottom: 56px; }
+
+.btn{
+  font-family: var(--font-body); font-weight:600; font-size: .92rem;
+  padding: 13px 22px; border-radius: var(--radius);
+  text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+  border: 1px solid var(--ink);
+  cursor: pointer;
+  transition: transform .12s ease, background .15s ease, color .15s ease;
+}
+.btn-primary{ background: var(--ink); color: var(--paper); }
+.btn-primary:hover{ transform: translateY(-1px); background: var(--red); border-color: var(--red); }
+.btn-ghost{ background: transparent; color: var(--ink); }
+.btn-ghost:hover{ background: var(--panel); }
+.btn:active{ transform: translateY(0); }
+.btn:focus-visible{ outline: 2px solid var(--teal); outline-offset: 2px; }
+
+.hero-strip{
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  max-width: 640px;
+}
+.strip-row{
+  display:flex; align-items:center; justify-content: space-between;
+  padding: 12px 2px;
+  border-bottom: 1px dashed var(--line);
+  font-family: var(--font-mono); font-size: .82rem;
+}
+.strip-row:last-child{ border-bottom:none; }
+.strip-topic{ color: var(--ink-soft); }
+.strip-tag{ font-weight:600; letter-spacing: .06em; font-size: .68rem; padding: 3px 8px; border-radius: 20px; }
+.tag-rising{ background: rgba(161,61,43,.12); color: var(--red); }
+.tag-peak{ background: rgba(184,134,43,.16); color: var(--gold-deep); }
+.tag-steady{ background: rgba(47,93,86,.14); color: var(--teal); }
+
+/* ===== Explainer ===== */
+.explainer, .tool-section, .apis-section{ padding: 64px 28px; border-top: 1px solid var(--line); }
+.explainer-head{ display:flex; align-items: baseline; gap: 16px; margin-bottom: 36px; }
+.section-no{
+  font-family: var(--font-mono); font-size: .78rem; color: var(--red);
+  border: 1px solid var(--red); border-radius: 50%;
+  width: 26px; height:26px; display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.explainer-head h2{
+  font-family: var(--font-display); font-weight: 600; font-size: 1.9rem; margin:0;
+}
+
+.explainer-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.explainer-card{
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px 20px;
+}
+.ec-label{
+  display:block; font-family: var(--font-mono); font-size: .68rem; letter-spacing:.1em;
+  color: var(--teal); text-transform: uppercase; margin-bottom: 10px;
+}
+.explainer-card p{ margin:0; color: var(--ink-soft); font-size: .94rem; }
+
+@media (max-width: 820px){
+  .explainer-grid{ grid-template-columns: 1fr; }
+}
+
+/* ===== Tool / case card ===== */
+.case-card{
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  box-shadow: 6px 6px 0 rgba(28,43,57,.06);
+}
+.case-card-top{
+  display:flex; align-items:center; justify-content: space-between;
+  padding: 0 20px; border-bottom: 1px solid var(--line);
+}
+.tabs{ display:flex; gap: 4px; }
+.tab{
+  font-family: var(--font-mono); font-size: .78rem; letter-spacing:.04em;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  color: var(--ink-faint); padding: 18px 4px; margin-right: 22px;
+  cursor: pointer; transition: color .15s, border-color .15s;
+}
+.tab:hover{ color: var(--ink); }
+.tab.is-active{ color: var(--ink); border-color: var(--red); }
+.case-id{ font-family: var(--font-mono); font-size: .72rem; color: var(--ink-faint); }
+.case-id span{ color: var(--ink); }
+
+.case-card-body{ padding: 26px 24px 24px; }
+
+label{ display:block; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .06em; color: var(--ink-soft); margin-bottom: 8px; text-transform: uppercase; }
+
+textarea, input[type="text"], select{
+  width:100%; font-family: var(--font-body); font-size: .96rem; color: var(--ink);
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 12px 14px; resize: vertical;
+}
+textarea:focus, input:focus, select:focus{ outline: 2px solid var(--teal); outline-offset: 1px; border-color: var(--teal); }
+
+.input-pane{ margin-bottom: 22px; }
+.input-pane.is-hidden{ display:none; }
+
+.field-row{ display:grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+@media (max-width: 620px){ .field-row{ grid-template-columns: 1fr; } }
+
+.case-card-actions{ display:flex; align-items:center; gap: 18px; flex-wrap: wrap; }
+.btn-stamp{ position: relative; }
+.hint{ font-size: .82rem; color: var(--ink-faint); }
+
+/* ===== Results ===== */
+.results{ margin-top: 54px; position: relative; }
+.results.is-hidden{ display:none; }
+.results-stamp{
+  position: absolute; top: -18px; right: 8px;
+  font-family: var(--font-mono); font-weight: 700; font-size: .8rem; letter-spacing: .12em;
+  color: var(--teal); border: 2px solid var(--teal); border-radius: 4px;
+  padding: 6px 12px; transform: rotate(4deg);
+  animation: stampIn .35s ease-out;
+}
+@keyframes stampIn{ from{ opacity:0; transform: rotate(4deg) scale(1.5);} to{ opacity:1; transform: rotate(4deg) scale(1);} }
+
+.result-block{ margin-bottom: 48px; }
+.result-head{ display:flex; align-items: baseline; gap: 14px; margin-bottom: 18px; flex-wrap: wrap; }
+.result-head h3{ font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; margin:0; }
+.result-head .section-no{ width:22px; height:22px; font-size:.68rem; border-color: var(--ink); color: var(--ink); }
+.result-note{ font-size: .82rem; color: var(--ink-faint); }
+
+/* ledger table */
+.ledger-table{ border-top: 1px solid var(--line-strong); }
+.ledger-row{
+  display:grid; grid-template-columns: 32px 1.6fr 110px 1fr 1.4fr;
+  gap: 14px; align-items:center;
+  padding: 14px 8px; border-bottom: 1px solid var(--line);
+  opacity:0; transform: translateY(6px);
+  animation: rowIn .4s ease forwards;
+}
+@keyframes rowIn{ to{ opacity:1; transform: translateY(0); } }
+.ledger-idx{ font-family: var(--font-mono); color: var(--ink-faint); font-size: .78rem; }
+.ledger-topic{ font-weight: 600; font-size: .95rem; }
+.ledger-momentum{ font-family: var(--font-mono); font-size: .65rem; letter-spacing:.06em; font-weight:600; padding: 3px 8px; border-radius: 20px; justify-self:start; }
+.ledger-bar-wrap{ display:flex; align-items:center; gap:8px; }
+.ledger-bar{ height:6px; background: var(--line); border-radius: 4px; flex:1; overflow:hidden; }
+.ledger-bar-fill{ height:100%; background: var(--gold); border-radius:4px; }
+.ledger-score{ font-family: var(--font-mono); font-size: .72rem; color: var(--ink-soft); width: 28px; text-align:right; }
+.ledger-why{ font-size: .84rem; color: var(--ink-soft); }
+
+@media (max-width: 780px){
+  .ledger-row{ grid-template-columns: 1fr; gap: 6px; padding: 16px 8px; }
+  .ledger-idx{ display:none; }
+}
+
+/* docket grid */
+.docket-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 18px; }
+.docket-card{
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 18px; display:flex; flex-direction:column; gap: 10px;
+}
+.docket-format{
+  font-family: var(--font-mono); font-size: .64rem; letter-spacing:.08em; text-transform:uppercase;
+  color: var(--teal); border: 1px solid var(--teal); border-radius: 20px; padding: 3px 9px; align-self:flex-start;
+}
+.docket-hook{ font-family: var(--font-display); font-weight: 600; font-size: 1.08rem; line-height:1.3; margin:0; }
+.docket-caption{ font-size: .86rem; color: var(--ink-soft); margin:0; }
+.docket-channel{ font-family: var(--font-mono); font-size: .68rem; color: var(--ink-faint); margin-top: auto; padding-top: 6px; border-top: 1px dashed var(--line); }
+
+/* campaign grid */
+.campaign-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap: 18px; }
+.campaign-card{
+  background: var(--ink); color: var(--paper);
+  border-radius: var(--radius); padding: 22px;
+  display:flex; flex-direction:column; gap: 10px;
+}
+.campaign-name{ font-family: var(--font-display); font-weight:600; font-size: 1.2rem; margin:0; }
+.campaign-row{ display:flex; gap: 8px; font-size: .82rem; }
+.campaign-row .k{ font-family: var(--font-mono); color: var(--gold); flex-shrink:0; width: 78px; text-transform:uppercase; font-size:.65rem; padding-top:2px; letter-spacing:.05em; }
+.campaign-row .v{ color: var(--paper); opacity:.92; }
+
+/* calendar */
+.calendar-table{ border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.cal-row{ display:grid; grid-template-columns: 110px 1.4fr 130px 1.6fr; }
+.cal-row + .cal-row{ border-top: 1px solid var(--line); }
+.cal-row.head{ background: var(--ink); color: var(--paper); font-family: var(--font-mono); font-size: .68rem; letter-spacing:.06em; text-transform:uppercase; }
+.cal-cell{ padding: 12px 14px; font-size: .86rem; }
+.cal-row.head .cal-cell{ padding: 10px 14px; }
+.cal-row:not(.head):nth-child(odd){ background: var(--panel); }
+.cal-day{ font-family: var(--font-mono); font-weight:600; }
+
+@media (max-width: 700px){
+  .cal-row{ grid-template-columns: 90px 1fr; }
+  .cal-cell:nth-child(3), .cal-cell:nth-child(4){ grid-column: 2; border-top: 1px dashed var(--line); }
+}
+
+/* ===== APIs ===== */
+.apis-intro{ max-width: 720px; color: var(--ink-soft); margin-bottom: 30px; }
+.apis-table{ border-top: 1px solid var(--line-strong); margin-bottom: 34px; }
+.api-row{
+  display:grid; grid-template-columns: 1fr 1.3fr 1.6fr 1fr;
+  gap: 14px; padding: 16px 8px; border-bottom: 1px solid var(--line); align-items:start;
+}
+.api-row.head{ font-family: var(--font-mono); font-size: .65rem; letter-spacing:.08em; text-transform:uppercase; color: var(--ink-faint); padding-bottom: 10px; }
+.api-name{ font-weight:600; }
+.api-desc{ color: var(--ink-soft); font-size: .88rem; }
+.api-use{ color: var(--ink-soft); font-size: .88rem; }
+.api-tag{ font-family: var(--font-mono); font-size: .66rem; color: var(--teal); }
+
+@media (max-width: 820px){
+  .api-row{ grid-template-columns: 1fr; gap: 4px; }
+  .api-row.head{ display:none; }
+  .api-row{ padding: 16px 8px; border-bottom: 1px solid var(--line); }
+  .api-row > div::before{ content: attr(data-label) ": "; font-family: var(--font-mono); font-size: .62rem; color: var(--ink-faint); }
+}
+
+.apis-architecture{
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px 24px;
+}
+.apis-architecture p{ margin: 0; color: var(--ink-soft); font-size: .92rem; max-width: 760px; }
+
+/* ===== Footer ===== */
+.site-footer{ border-top: 1px solid var(--line); padding: 26px 28px 40px; }
+.footer-inner{ display:flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: .76rem; color: var(--ink-faint); }
+
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <div class="brand">
+      <span class="brand-mark">LI<span class="brand-mark-dot">•</span>CSA</span>
+      <span class="brand-tag">Signal Desk for Life Insurance Marketers</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#ledger">The Ledger</a>
+      <a href="#tool">Open a File</a>
+      <a href="#apis">Wire the Signal</a>
+    </nav>
+    <div class="header-stamp">FILE STATUS<span>ACTIVE</span></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero wrap">
+    <div class="hero-eyebrow">
+      <span class="case-no">CASE FILE №&nbsp;LICSA-07</span>
+      <span class="rule"></span>
+      <span>CONTENT INTELLIGENCE, LIFE &amp; PROTECTION CATEGORY</span>
+    </div>
+
+    <h1 class="hero-title">
+      Every competitor post<br>
+      is a <em>signal.</em><br>
+      We read the file.
+    </h1>
+
+    <p class="hero-sub">
+      Paste a competitor's caption, ad, or article — or just name a topic. LICSA cross-references
+      it against a life-insurance content ledger and hands back the themes worth reacting to,
+      what to post, and what campaign to build around it.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#tool" class="btn btn-primary">Open the Ledger ↓</a>
+      <a href="#apis" class="btn btn-ghost">See the data sources</a>
+    </div>
+
+    <div class="hero-strip" aria-hidden="true">
+      <div class="strip-row"><span class="strip-topic">Term vs. whole life confusion</span><span class="strip-tag tag-rising">RISING</span></div>
+      <div class="strip-row"><span class="strip-topic">Coverage for gig &amp; creator income</span><span class="strip-tag tag-peak">PEAKING</span></div>
+      <div class="strip-row"><span class="strip-topic">Grief-proofing your family's finances</span><span class="strip-tag tag-steady">STEADY</span></div>
+    </div>
+  </section>
+
+  <!-- WHAT IT DOES / LEDGER EXPLAINER -->
+  <section id="ledger" class="explainer wrap">
+    <div class="explainer-head">
+      <span class="section-no">01</span>
+      <h2>What gets logged in the file</h2>
+    </div>
+    <div class="explainer-grid">
+      <div class="explainer-card">
+        <span class="ec-label">Intake</span>
+        <p>Drop in a competitor's post, ad copy, or article — or skip straight to a topic like "term life insurance for new parents."</p>
+      </div>
+      <div class="explainer-card">
+        <span class="ec-label">Cross-reference</span>
+        <p>The engine matches your input against a taxonomy of recurring life-insurance content themes and scores each one's current signal strength.</p>
+      </div>
+      <div class="explainer-card">
+        <span class="ec-label">Brief</span>
+        <p>Out comes a signal ledger, ready-to-shoot content ideas, three campaign briefs, and a seven-day posting calendar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOL -->
+  <section id="tool" class="tool-section wrap">
+    <div class="explainer-head">
+      <span class="section-no">02</span>
+      <h2>Open a file</h2>
+    </div>
+
+    <div class="case-card">
+
+      <div class="case-card-top">
+        <div class="tabs" role="tablist">
+          <button class="tab is-active" role="tab" data-mode="competitor" id="tab-competitor">Competitor File</button>
+          <button class="tab" role="tab" data-mode="topic" id="tab-topic">Topic Brief</button>
+        </div>
+        <span class="case-id">DOCKET #<span id="docketNo">0001</span></span>
+      </div>
+
+      <div class="case-card-body">
+
+        <div class="input-pane" id="pane-competitor">
+          <label for="competitorText">Paste competitor content</label>
+          <textarea id="competitorText" rows="6" placeholder="Paste a caption, ad script, landing page copy, or article text from a competitor's campaign…"></textarea>
+        </div>
+
+        <div class="input-pane is-hidden" id="pane-topic">
+          <label for="topicText">Name a topic</label>
+          <input type="text" id="topicText" placeholder="e.g. life insurance for gig workers, retirement income gap, grief and finances…">
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="segmentSelect">Audience segment</label>
+            <select id="segmentSelect">
+              <option value="general">General public</option>
+              <option value="families">Young families</option>
+              <option value="gig">Gig &amp; creator economy</option>
+              <option value="retirees">Retirees &amp; pre-retirees</option>
+              <option value="hnw">High net worth</option>
+              <option value="women">Women &amp; financial independence</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="objectiveSelect">Objective</label>
+            <select id="objectiveSelect">
+              <option value="awareness">Brand awareness</option>
+              <option value="education">Education / literacy</option>
+              <option value="leadgen">Lead generation</option>
+              <option value="retention">Retention &amp; loyalty</option>
+              <option value="trust">Trust &amp; credibility</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="case-card-actions">
+          <button class="btn btn-primary btn-stamp" id="runBtn">Run Analysis</button>
+          <span class="hint" id="runHint">Reads your input against the LICSA trend ledger. No content leaves your browser.</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results is-hidden" id="results">
+
+      <div class="results-stamp" id="resultsStamp">ANALYZED</div>
+
+      <!-- Signal Ledger -->
+      <div class="result-block">
+        <div class="result-head">
+          <span class="section-no">A</span>
+          <h3>Signal Ledger</h3>
+          <span class="result-note">Themes matched to your file, ranked by current signal strength</span>
+        </div>
+        <div class="ledger-table" id="ledgerTable"></div>
+      </div>
+
+      <!-- Content Docket -->
+      <div class="result-block">
+        <div class="result-head">
+          <span class="section-no">B</span>
+          <h3>Content Docket</h3>
+          <span class="result-note">Ready-to-shoot ideas pulled from the top signals</span>
+        </div>
+        <div class="docket-grid" id="docketGrid"></div>
+      </div>
+
+      <!-- Campaign Briefs -->
+      <div class="result-block">
+        <div class="result-head">
+          <span class="section-no">C</span>
+          <h3>Campaign Briefs</h3>
+          <span class="result-note">Three campaign concepts, sized to your objective</span>
+        </div>
+        <div class="campaign-grid" id="campaignGrid"></div>
+      </div>
+
+      <!-- Calendar -->
+      <div class="result-block">
+        <div class="result-head">
+          <span class="section-no">D</span>
+          <h3>7-Day Docket Calendar</h3>
+          <span class="result-note">A starting rotation across your top themes</span>
+        </div>
+        <div class="calendar-table" id="calendarTable"></div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- APIs -->
+  <section id="apis" class="apis-section wrap">
+    <div class="explainer-head">
+      <span class="section-no">03</span>
+      <h2>Wire the real signal</h2>
+    </div>
+    <p class="apis-intro">
+      The ledger above runs on a heuristic engine, in your browser, matched against a curated
+      life-insurance content taxonomy — no live network calls, no keys required. To replace it
+      with live trend and competitor data, this is the appendix of sources built for that job.
+    </p>
+
+    <div class="apis-table" id="apisTable"></div>
+
+    <div class="apis-architecture">
+      <span class="ec-label">Suggested wiring</span>
+      <p>
+        Pull raw signal from Reddit + Google Trends (via SerpApi) + the Meta Ad Library for what
+        competitors are actively running. Feed that raw material into the Claude API as the
+        reasoning layer — it clusters the raw signal into themes, scores relevance to your segment,
+        and drafts the content docket and campaign briefs in the same shape this page already
+        produces. That keeps one model doing the intelligence work, and the APIs doing pure
+        data-gathering.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>LICSA — heuristic demo build. Not investment, insurance, or legal advice.</span>
+    <span>Signal engine runs client-side. Nothing you paste is sent anywhere.</span>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   LICSA — Signal Engine (client-side heuristic demo)
+   Matches pasted competitor content / topics against a
+   curated life-insurance content taxonomy. No network calls.
+   ========================================================= */
+
+const SEGMENT_COPY = {
+  general: "everyday households",
+  families: "young families",
+  gig: "gig workers and creators",
+  retirees: "retirees and pre-retirees",
+  hnw: "high-net-worth households",
+  women: "women building financial independence",
+};
+
+const OBJECTIVE_COPY = {
+  awareness: "awareness",
+  education: "financial literacy",
+  leadgen: "lead generation",
+  retention: "retention and loyalty",
+  trust: "trust and credibility",
+};
+
+const OBJECTIVE_CTA = {
+  awareness: "Follow for the next file",
+  education: "Save this for later",
+  leadgen: "Get your free coverage check",
+  retention: "See what your policy already covers",
+  trust: "Read the fine print, decoded",
+};
+
+// ---- Taxonomy -------------------------------------------------
+const THEMES = [
+  {
+    id: "term-vs-whole",
+    label: "Term vs. whole life confusion",
+    keywords: ["term life", "whole life", "permanent life", "which policy", "difference between", "confused about"],
+    why: "The single most-searched point of confusion in the category — reliable engagement bait when explained simply.",
+    ideas: [
+      { format: "Carousel", hook: "You don't need to understand insurance. You need to answer one question.", caption: "A 5-slide breakdown of term vs. whole life for {segment} — no jargon, one decision tree.", channel: "Instagram / LinkedIn" },
+      { format: "Short-form video", hook: "I asked 10 {segment} what 'whole life insurance' means. Nobody got it right.", caption: "Street-interview style explainer ending on the one question that actually decides it.", channel: "Reels / TikTok" },
+    ],
+    campaign: { name: "The Decision Tree", angle: "Turn the category's most confusing choice into a 60-second decision, not a sales pitch.", channels: "Instagram, YouTube Shorts, Email", flight: "3 weeks" },
+  },
+  {
+    id: "gig-income",
+    label: "Coverage for gig and creator income",
+    keywords: ["gig worker", "freelance", "creator economy", "side hustle", "self employed", "1099", "no employer benefits"],
+    why: "Traditional life insurance marketing still assumes a W-2 job — content that acknowledges gig income earns outsized shares.",
+    ideas: [
+      { format: "Blog / LinkedIn article", hook: "No employer. No HR benefits page. Here's what protecting your income actually looks like.", caption: "A practical guide for {segment} on building protection without a benefits department.", channel: "Blog / LinkedIn" },
+      { format: "Reel", hook: "Nobody's automatically enrolling you in life insurance. That's the point of this video.", caption: "Fast, direct explainer aimed at freelancers who've never had an HR onboarding packet.", channel: "Instagram / TikTok" },
+    ],
+    campaign: { name: "Self-Employed, Self-Insured", angle: "Position the brand as the benefits department gig workers never had.", channels: "LinkedIn, Instagram, Podcast ads", flight: "4 weeks" },
+  },
+  {
+    id: "grief-finances",
+    label: "Grief-proofing your family's finances",
+    keywords: ["grief", "loss of a loved one", "funeral costs", "what happens if i die", "family after i'm gone", "final expenses"],
+    why: "Emotionally resonant and rarely addressed head-on by competitors — differentiated ground if handled with care.",
+    ideas: [
+      { format: "Long-form video / testimonial", hook: "She didn't cry about losing him. She cried about the paperwork.", caption: "A real-story-style piece on the administrative weight grief adds, and how coverage removes one layer of it.", channel: "YouTube / Facebook" },
+      { format: "Carousel", hook: "The 6 things a family has to pay for in the first 30 days.", caption: "A gentle, practical checklist for {segment} — no scare tactics, just what's true.", channel: "Instagram / Facebook" },
+    ],
+    campaign: { name: "One Less Thing", angle: "Reframe coverage as removing logistical weight from grief, not just a payout.", channels: "YouTube, Facebook, Email nurture", flight: "6 weeks, evergreen" },
+  },
+  {
+    id: "retirement-gap",
+    label: "The retirement income gap",
+    keywords: ["retirement income", "outliving savings", "pension gap", "401k shortfall", "retire early", "income gap"],
+    why: "Rising concern among pre-retirees as pensions disappear — high-intent audience actively researching solutions.",
+    ideas: [
+      { format: "Data explainer video", hook: "Your 401(k) was never designed to last 30 years. Here's the math.", caption: "A visual breakdown of the income gap {segment} face, and where permanent coverage fits the picture.", channel: "YouTube / LinkedIn" },
+      { format: "Email series", hook: "The retirement number nobody tells you.", caption: "A 3-part nurture sequence walking through the income gap and how to close it.", channel: "Email" },
+    ],
+    campaign: { name: "The Real Number", angle: "Replace vague retirement anxiety with one concrete, personalized number.", channels: "LinkedIn, Email, Webinar", flight: "5 weeks" },
+  },
+  {
+    id: "kids-education",
+    label: "Locking in your kids' future costs",
+    keywords: ["child education", "college fund", "kids future", "education costs", "save for college", "new parent"],
+    why: "New-parent audiences over-index on planning content shared within family networks.",
+    ideas: [
+      { format: "Carousel", hook: "College costs double every 17 years. Your policy can lock in today's price.", caption: "Simple math for {segment} on why timing coverage early compounds in your favor.", channel: "Instagram / Pinterest" },
+      { format: "Short-form video", hook: "We ran the numbers on 'I'll start saving next year.'", caption: "A cost-of-waiting explainer built around a single delayed decision.", channel: "Reels / TikTok" },
+    ],
+    campaign: { name: "Lock In Today's Price", angle: "Frame early coverage as a financial hedge against future cost inflation, not just protection.", channels: "Instagram, Pinterest, Email", flight: "4 weeks" },
+  },
+  {
+    id: "women-independence",
+    label: "Women building financial independence",
+    keywords: ["women and money", "financial independence", "gender pay gap", "single income woman", "women investing"],
+    why: "Growing, underserved content niche — competitors mostly market to households, not individual women directly.",
+    ideas: [
+      { format: "Interview series", hook: "She built her own safety net. Nobody built it for her.", caption: "Profile-style content featuring real {segment} and how coverage fits their independence, not a partner's.", channel: "Instagram / YouTube" },
+      { format: "Carousel", hook: "Financial independence isn't just investing. It's also insuring what you've built.", caption: "A reframe post connecting the FI movement to protection planning.", channel: "Instagram / LinkedIn" },
+    ],
+    campaign: { name: "Built, Not Given", angle: "Speak to women as primary financial decision-makers, not household dependents.", channels: "Instagram, YouTube, Newsletter", flight: "4 weeks" },
+  },
+  {
+    id: "debt-protection",
+    label: "Debt doesn't disappear when you do",
+    keywords: ["debt", "mortgage protection", "co-signed loan", "student loan death", "who pays my debt"],
+    why: "A blunt, high-clarity angle that performs well as a pattern interrupt in feeds full of soft lifestyle content.",
+    ideas: [
+      { format: "Short-form video", hook: "Your mortgage doesn't get forgiven. It gets inherited.", caption: "A direct-to-camera explainer on what happens to debt after death, aimed at {segment}.", channel: "TikTok / Reels" },
+      { format: "Static / carousel", hook: "Co-signed a loan? Here's who's actually on the hook.", caption: "A clear breakdown of shared debt liability and how coverage closes the gap.", channel: "Instagram / Facebook" },
+    ],
+    campaign: { name: "Who Inherits the Debt", angle: "Use the blunt truth about debt transfer as a wake-up-call entry point.", channels: "TikTok, Instagram, Facebook", flight: "3 weeks" },
+  },
+  {
+    id: "ai-claims-speed",
+    label: "Faster claims, less paperwork",
+    keywords: ["claims process", "how long do claims take", "paperwork", "digital claims", "ai underwriting", "instant approval"],
+    why: "Operational-trust content performs well post-purchase and counters the industry's reputation for slow claims.",
+    ideas: [
+      { format: "Explainer video", hook: "We timed our own claims process. Here's what we found.", caption: "A behind-the-scenes look at how claims actually move, built for skeptical {segment}.", channel: "YouTube / Website" },
+      { format: "Carousel", hook: "3 documents. 2 steps. Here's what filing a claim really takes.", caption: "A transparency post demystifying the claims process end to end.", channel: "Instagram / LinkedIn" },
+    ],
+    campaign: { name: "Behind the Claim", angle: "Build trust by making the claims process visible and specific, not just promised.", channels: "YouTube, Website, LinkedIn", flight: "4 weeks" },
+  },
+  {
+    id: "tax-advantage",
+    label: "Tax-advantaged uses of life insurance",
+    keywords: ["tax free", "tax advantage", "estate planning", "cash value", "tax efficient", "wealth transfer"],
+    why: "High-value topic for HNW audiences — dense but converts well when simplified into scenarios.",
+    ideas: [
+      { format: "LinkedIn article", hook: "The tax code has an insurance-shaped loophole. Here's how it works, legally.", caption: "A scenario-based explainer for {segment} on cash value and wealth-transfer strategy.", channel: "LinkedIn" },
+      { format: "Webinar", hook: "Ask a CPA and a policyholder the same question. Compare the answers.", caption: "A dual-perspective session breaking down tax-advantaged planning use cases.", channel: "Webinar / Email invite" },
+    ],
+    campaign: { name: "The Insurance-Shaped Loophole", angle: "Position coverage as a legitimate estate and tax planning tool, not just protection.", channels: "LinkedIn, Webinar, Email", flight: "5 weeks" },
+  },
+  {
+    id: "mental-health-money",
+    label: "Financial stress and mental health",
+    keywords: ["financial stress", "money anxiety", "mental health", "financial wellbeing", "money worry"],
+    why: "Cross-category topic with strong organic reach — connects protection planning to a broader wellbeing conversation.",
+    ideas: [
+      { format: "Short-form video", hook: "Money anxiety isn't about the number. It's about the unknown.", caption: "A calming, low-production piece linking planning certainty to reduced financial anxiety for {segment}.", channel: "Instagram / TikTok" },
+      { format: "Blog", hook: "What a financial plan actually does for your nervous system.", caption: "An article connecting behavioral science to the peace-of-mind case for coverage.", channel: "Blog / Newsletter" },
+    ],
+    campaign: { name: "Certainty Over Control", angle: "Sell peace of mind as a mental-health outcome, not a financial product feature.", channels: "Instagram, Blog, Newsletter", flight: "4 weeks" },
+  },
+  {
+    id: "bundled-health",
+    label: "Bundling life and health coverage",
+    keywords: ["bundle", "health insurance", "combined coverage", "life and health", "package plan"],
+    why: "Practical, cost-driven angle that resonates during open-enrollment adjacent periods.",
+    ideas: [
+      { format: "Comparison carousel", hook: "Buying life and health separately is costing you more than you think.", caption: "A side-by-side cost comparison built for {segment} evaluating bundled options.", channel: "Instagram / Facebook" },
+      { format: "Email", hook: "One policy review. Two kinds of coverage.", caption: "A prompt to audit existing coverage and see where bundling saves money.", channel: "Email" },
+    ],
+    campaign: { name: "One Review, Two Policies", angle: "Use cost-consolidation as a low-friction reason to open a policy review conversation.", channels: "Email, Facebook, Instagram", flight: "3 weeks" },
+  },
+  {
+    id: "climate-longevity",
+    label: "Longer lifespans, longer plans",
+    keywords: ["life expectancy", "longevity", "living longer", "climate risk", "outlive your plan"],
+    why: "Emerging long-horizon topic — early-mover content advantage while most competitors haven't touched it yet.",
+    ideas: [
+      { format: "Data video", hook: "You'll likely live longer than your parents. Your plan should assume that too.", caption: "A forward-looking piece for {segment} on planning for longer, not average, lifespans.", channel: "YouTube / LinkedIn" },
+      { format: "Carousel", hook: "Longevity is good news. Is your coverage built for it?", caption: "A reframe post turning a demographic trend into a planning prompt.", channel: "Instagram / LinkedIn" },
+    ],
+    campaign: { name: "Built for the Extra Decade", angle: "Use rising life expectancy as a fresh, optimistic reason to revisit coverage assumptions.", channels: "YouTube, LinkedIn, Newsletter", flight: "4 weeks" },
+  },
+  {
+    id: "creator-economy-risk",
+    label: "Protecting a personal brand's income",
+    keywords: ["personal brand", "influencer income", "content creator", "brand deals", "youtube income"],
+    why: "Fast-growing, under-addressed niche as more of the workforce monetizes personal audiences directly.",
+    ideas: [
+      { format: "Interview", hook: "Your following is an asset. Have you actually protected the income it generates?", caption: "A creator-facing explainer for {segment} connecting audience-driven income to protection planning.", channel: "YouTube / Instagram" },
+      { format: "Short-form video", hook: "Brand deals don't come with a benefits package. Let's talk about that.", caption: "A direct, creator-voiced piece on income protection outside traditional employment.", channel: "TikTok / Reels" },
+    ],
+    campaign: { name: "Protect the Following", angle: "Speak directly to creators about protecting monetized personal brands.", channels: "TikTok, Instagram, YouTube", flight: "4 weeks" },
+  },
+  {
+    id: "myths-mythbusting",
+    label: "Busting the 'it's too expensive' myth",
+    keywords: ["too expensive", "can't afford", "life insurance cost", "myth", "misconception"],
+    why: "Consistently one of the highest-performing evergreen formats in the category — cost perception, not cost reality, is the barrier.",
+    ideas: [
+      { format: "Short-form video", hook: "I guessed my life insurance quote. I was off by $380 a year.", caption: "A reaction-style video correcting the price-perception gap for {segment}.", channel: "TikTok / Reels" },
+      { format: "Carousel", hook: "3 things people assume about cost that are flatly wrong.", caption: "A myth-busting post using real average quote data as the hook.", channel: "Instagram / Facebook" },
+    ],
+    campaign: { name: "The Coffee Math", angle: "Anchor the cost conversation to a relatable daily spend comparison.", channels: "TikTok, Instagram, Facebook", flight: "3 weeks" },
+  },
+  {
+    id: "family-story",
+    label: "Real family protection stories",
+    keywords: ["real story", "customer story", "policyholder", "family protected", "testimonial"],
+    why: "Trust-building social proof — outperforms product-forward content on conversion in retargeting.",
+    ideas: [
+      { format: "Documentary-style video", hook: "We asked one family what their policy actually changed.", caption: "An unscripted testimonial format built to feel like a conversation, not an ad, for {segment}.", channel: "YouTube / Facebook" },
+      { format: "Carousel", hook: "One policy. One phone call. Here's what it covered.", caption: "A specific, detail-driven real-claim story used as proof, not promise.", channel: "Instagram / Facebook" },
+    ],
+    campaign: { name: "One Call, One Family", angle: "Let a single specific, verified story carry the proof burden instead of brand claims.", channels: "YouTube, Facebook, Retargeting", flight: "6 weeks" },
+  },
+  {
+    id: "beneficiary-mistakes",
+    label: "Beneficiary mistakes people don't notice",
+    keywords: ["beneficiary", "outdated policy", "forgot to update", "ex spouse policy", "policy review"],
+    why: "Low-competition, high-utility topic that drives existing-policyholder engagement and retention.",
+    ideas: [
+      { format: "Short-form video", hook: "1 in 3 policies still list an outdated beneficiary. Is yours one of them?", caption: "A quick-check prompt for {segment} to review and update an existing policy.", channel: "Instagram / TikTok" },
+      { format: "Email", hook: "Five minutes to check the one field people forget.", caption: "A retention-focused email nudging a beneficiary review.", channel: "Email" },
+    ],
+    campaign: { name: "The Five-Minute Check", angle: "Turn a mundane policy-hygiene task into a proactive retention touchpoint.", channels: "Email, SMS, Instagram", flight: "2 weeks" },
+  },
+  {
+    id: "young-adult-first-policy",
+    label: "Buying your first policy in your 20s",
+    keywords: ["first policy", "buy life insurance young", "insurance in my 20s", "early coverage"],
+    why: "Category-education content aimed at first-time buyers, positioned to capture long-term customer value early.",
+    ideas: [
+      { format: "Short-form video", hook: "I bought life insurance at 24. Here's what surprised me.", caption: "A founder/employee-style personal account aimed at {segment} considering a first policy.", channel: "TikTok / Instagram" },
+      { format: "Blog", hook: "The real reason to buy coverage before you think you need it.", caption: "An educational piece explaining rate-lock and health-qualification advantages of buying early.", channel: "Blog / SEO" },
+    ],
+    campaign: { name: "Buy It Before You Need It", angle: "Frame early purchase as a financial optimization, not a morbid milestone.", channels: "TikTok, Instagram, Blog/SEO", flight: "4 weeks" },
+  },
+  {
+    id: "policy-comparison-tools",
+    label: "Making quotes easy to compare",
+    keywords: ["compare quotes", "which company", "insurance comparison", "shopping for insurance", "get a quote"],
+    why: "High commercial intent — audiences actively in a buying window respond well to comparison-format content.",
+    ideas: [
+      { format: "Comparison graphic", hook: "We put three quotes side by side so you don't have to.", caption: "A transparent quote-comparison piece aimed at {segment} in active research mode.", channel: "Instagram / Website" },
+      { format: "Landing page + video", hook: "Get a real number in under two minutes, no phone call required.", caption: "A frictionless quote-tool promotion for high-intent traffic.", channel: "Paid social / Search" },
+    ],
+    campaign: { name: "No Phone Call Required", angle: "Remove the friction and pressure people associate with getting a quote.", channels: "Paid social, Search, Website", flight: "Always-on" },
+  },
+  {
+    id: "small-business-owner",
+    label: "Coverage for small business owners",
+    keywords: ["small business owner", "key person insurance", "business succession", "buy sell agreement"],
+    why: "Under-marketed B2B-adjacent niche with high policy values and strong LinkedIn performance.",
+    ideas: [
+      { format: "LinkedIn article", hook: "If you're the business, what happens to the business without you?", caption: "A key-person and succession-planning explainer for {segment} running their own company.", channel: "LinkedIn" },
+      { format: "Webinar", hook: "The buy-sell agreement most business partners never finish.", caption: "A practical session walking through succession planning gaps.", channel: "Webinar / LinkedIn" },
+    ],
+    campaign: { name: "The Business Behind the Business", angle: "Address succession and key-person risk as a business continuity issue, not personal insurance.", channels: "LinkedIn, Webinar, Email", flight: "5 weeks" },
+  },
+  {
+    id: "digital-first-experience",
+    label: "No medical exam, fully digital signup",
+    keywords: ["no medical exam", "digital signup", "online application", "instant quote", "app based"],
+    why: "Convenience-led content that converts well against competitors still requiring in-person underwriting.",
+    ideas: [
+      { format: "Short-form video", hook: "I applied for life insurance on my lunch break. No exam, no agent call.", caption: "A speed-and-convenience demo aimed at {segment} who expect a digital-first experience.", channel: "TikTok / Reels" },
+      { format: "Carousel", hook: "What used to take 6 weeks now takes 6 minutes.", caption: "A before/after style post contrasting traditional underwriting with a digital application.", channel: "Instagram / LinkedIn" },
+    ],
+    campaign: { name: "Six Minutes, Not Six Weeks", angle: "Make application speed itself the headline differentiator.", channels: "TikTok, Instagram, Paid social", flight: "3 weeks" },
+  },
+];
+
+// ---- Utility ----------------------------------------------------
+function seededRandom(seed) {
+  let x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+
+function dayOfYearSeed() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 0);
+  const diff = now - start;
+  return Math.floor(diff / 86400000);
+}
+
+function scoreTheme(theme, textLower) {
+  if (!textLower) return 0;
+  let score = 0;
+  theme.keywords.forEach((kw) => {
+    if (textLower.includes(kw)) {
+      score += kw.includes(" ") ? 3 : 2;
+    } else {
+      // loose partial word match
+      const kwFirstWord = kw.split(" ")[0];
+      if (kwFirstWord.length > 4 && textLower.includes(kwFirstWord)) score += 1;
+    }
+  });
+  return score;
+}
+
+function pickTrendingFill(count, exclude, seed) {
+  const pool = THEMES.filter((t) => !exclude.has(t.id));
+  const scored = pool.map((t, i) => ({ t, r: seededRandom(seed + i * 7.13) }));
+  scored.sort((a, b) => b.r - a.r);
+  return scored.slice(0, count).map((s) => s.t);
+}
+
+function runEngine(rawText, segmentKey, objectiveKey) {
+  const textLower = (rawText || "").toLowerCase();
+  const seed = dayOfYearSeed() + rawText.length;
+
+  const scored = THEMES.map((t) => ({ theme: t, raw: scoreTheme(t, textLower) }));
+  scored.sort((a, b) => b.raw - a.raw);
+
+  const maxRaw = Math.max(...scored.map((s) => s.raw), 1);
+  const matched = scored.filter((s) => s.raw > 0).slice(0, 5);
+
+  const usedIds = new Set(matched.map((m) => m.theme.id));
+  const needed = Math.max(0, 5 - matched.length);
+  const filler = pickTrendingFill(needed, usedIds, seed).map((t) => ({ theme: t, raw: 0 }));
+
+  const combined = [...matched, ...filler].slice(0, 5);
+
+  // normalize scores to a 42-96 display range so filler entries still look credible
+  const withScores = combined.map((c, i) => {
+    let pct;
+    if (c.raw > 0) {
+      pct = Math.round(48 + (c.raw / (maxRaw + 2)) * 48);
+    } else {
+      pct = Math.round(70 - i * 9 + seededRandom(seed + i) * 6);
+    }
+    pct = Math.max(38, Math.min(97, pct));
+    return { ...c, pct, isMatched: c.raw > 0 };
+  });
+
+  withScores.sort((a, b) => b.pct - a.pct);
+
+  return { themes: withScores, seed };
+}
+
+function momentumFor(pct) {
+  if (pct >= 78) return { label: "PEAKING", cls: "tag-peak" };
+  if (pct >= 55) return { label: "RISING", cls: "tag-rising" };
+  return { label: "STEADY", cls: "tag-steady" };
+}
+
+function fillTemplate(str, segmentKey) {
+  return str.replaceAll("{segment}", SEGMENT_COPY[segmentKey] || "your audience");
+}
+
+// ---- Rendering ----------------------------------------------------
+function renderLedger(container, scoredThemes) {
+  container.innerHTML = "";
+  scoredThemes.forEach((item, i) => {
+    const mo = momentumFor(item.pct);
+    const row = document.createElement("div");
+    row.className = "ledger-row";
+    row.style.animationDelay = `${i * 70}ms`;
+    row.innerHTML = `
+      <span class="ledger-idx">${String(i + 1).padStart(2, "0")}</span>
+      <span class="ledger-topic">${item.theme.label}</span>
+      <span class="ledger-momentum ${mo.cls}">${mo.label}</span>
+      <span class="ledger-bar-wrap">
+        <span class="ledger-bar"><span class="ledger-bar-fill" style="width:${item.pct}%"></span></span>
+        <span class="ledger-score">${item.pct}</span>
+      </span>
+      <span class="ledger-why">${item.theme.why}</span>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function renderDocket(container, scoredThemes, segmentKey, seed) {
+  container.innerHTML = "";
+  const top = scoredThemes.slice(0, 4);
+  top.forEach((item, i) => {
+    const idea = item.theme.ideas[Math.floor(seededRandom(seed + i * 3.3) * item.theme.ideas.length)];
+    const card = document.createElement("div");
+    card.className = "docket-card";
+    card.innerHTML = `
+      <span class="docket-format">${idea.format}</span>
+      <p class="docket-hook">${fillTemplate(idea.hook, segmentKey)}</p>
+      <p class="docket-caption">${fillTemplate(idea.caption, segmentKey)}</p>
+      <span class="docket-channel">${idea.channel}</span>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function renderCampaigns(container, scoredThemes, segmentKey, objectiveKey) {
+  container.innerHTML = "";
+  const top = scoredThemes.slice(0, 3);
+  top.forEach((item) => {
+    const c = item.theme.campaign;
+    const card = document.createElement("div");
+    card.className = "campaign-card";
+    card.innerHTML = `
+      <p class="campaign-name">${c.name}</p>
+      <div class="campaign-row"><span class="k">Angle</span><span class="v">${c.angle}</span></div>
+      <div class="campaign-row"><span class="k">Objective</span><span class="v">${OBJECTIVE_COPY[objectiveKey]}, aimed at ${SEGMENT_COPY[segmentKey]}</span></div>
+      <div class="campaign-row"><span class="k">CTA</span><span class="v">${OBJECTIVE_CTA[objectiveKey]}</span></div>
+      <div class="campaign-row"><span class="k">Channels</span><span class="v">${c.channels}</span></div>
+      <div class="campaign-row"><span class="k">Flight</span><span class="v">${c.flight}</span></div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function renderCalendar(container, scoredThemes, seed) {
+  container.innerHTML = "";
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const head = document.createElement("div");
+  head.className = "cal-row head";
+  head.innerHTML = `
+    <span class="cal-cell">Day</span>
+    <span class="cal-cell">Theme</span>
+    <span class="cal-cell">Format</span>
+    <span class="cal-cell">Note</span>
+  `;
+  container.appendChild(head);
+
+  const pool = scoredThemes.length ? scoredThemes : [];
+  days.forEach((day, i) => {
+    const item = pool[i % pool.length];
+    const idea = item.theme.ideas[i % item.theme.ideas.length];
+    const row = document.createElement("div");
+    row.className = "cal-row";
+    row.innerHTML = `
+      <span class="cal-cell cal-day">${day}</span>
+      <span class="cal-cell">${item.theme.label}</span>
+      <span class="cal-cell">${idea.format}</span>
+      <span class="cal-cell">${idea.channel}</span>
+    `;
+    container.appendChild(row);
+  });
+}
+
+// ---- APIs table ----------------------------------------------------
+const API_SOURCES = [
+  { name: "X (Twitter) API v2", desc: "Recent search and trend endpoints for real-time conversation volume.", use: "Track spikes in category keywords and competitor mentions.", tag: "Live social" },
+  { name: "Reddit API", desc: "Subreddit and keyword search across finance and insurance communities.", use: "Surface unfiltered questions and complaints your audience is voicing.", tag: "Live social" },
+  { name: "Meta Ad Library API", desc: "Public archive of active ads run by any advertiser on Meta platforms.", use: "See exactly what competitors are actively spending on right now.", tag: "Competitor intel" },
+  { name: "Google Trends (via SerpApi)", desc: "Search interest over time for any term or topic, by region.", use: "Confirm a theme is actually rising before you brief a campaign.", tag: "Search trend" },
+  { name: "NewsAPI / GNews", desc: "Aggregated news article search with recency filters.", use: "Catch breaking news angles worth a fast reactive post.", tag: "News" },
+  { name: "YouTube Data API", desc: "Search, trending, and comment data for video content.", use: "Spot which explainer formats and hooks are outperforming in-category.", tag: "Live social" },
+  { name: "SimilarWeb API", desc: "Traffic and engagement estimates for competitor websites.", use: "See which competitor content pages are actually pulling traffic.", tag: "Competitor intel" },
+  { name: "Claude API", desc: "Language model for clustering raw signal into themes and drafting copy.", use: "Replace this page's heuristic engine with real reasoning over live data.", tag: "Reasoning layer" },
+];
+
+function renderApisTable(container) {
+  container.innerHTML = "";
+  const head = document.createElement("div");
+  head.className = "api-row head";
+  head.innerHTML = `<div>Source</div><div>What it gives you</div><div>Use it for</div><div>Category</div>`;
+  container.appendChild(head);
+
+  API_SOURCES.forEach((api) => {
+    const row = document.createElement("div");
+    row.className = "api-row";
+    row.innerHTML = `
+      <div class="api-name" data-label="Source">${api.name}</div>
+      <div class="api-desc" data-label="Gives you">${api.desc}</div>
+      <div class="api-use" data-label="Use for">${api.use}</div>
+      <div class="api-tag" data-label="Category">${api.tag}</div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+// ---- Wire up UI ----------------------------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+  renderApisTable(document.getElementById("apisTable"));
+
+  const tabCompetitor = document.getElementById("tab-competitor");
+  const tabTopic = document.getElementById("tab-topic");
+  const paneCompetitor = document.getElementById("pane-competitor");
+  const paneTopic = document.getElementById("pane-topic");
+  let mode = "competitor";
+
+  function setMode(newMode) {
+    mode = newMode;
+    tabCompetitor.classList.toggle("is-active", mode === "competitor");
+    tabTopic.classList.toggle("is-active", mode === "topic");
+    paneCompetitor.classList.toggle("is-hidden", mode !== "competitor");
+    paneTopic.classList.toggle("is-hidden", mode !== "topic");
+  }
+  tabCompetitor.addEventListener("click", () => setMode("competitor"));
+  tabTopic.addEventListener("click", () => setMode("topic"));
+
+  let docketCounter = 1;
+  const docketNoEl = document.getElementById("docketNo");
+
+  document.getElementById("runBtn").addEventListener("click", () => {
+    const text = mode === "competitor"
+      ? document.getElementById("competitorText").value.trim()
+      : document.getElementById("topicText").value.trim();
+
+    const segmentKey = document.getElementById("segmentSelect").value;
+    const objectiveKey = document.getElementById("objectiveSelect").value;
+
+    const { themes, seed } = runEngine(text, segmentKey, objectiveKey);
+
+    renderLedger(document.getElementById("ledgerTable"), themes);
+    renderDocket(document.getElementById("docketGrid"), themes, segmentKey, seed);
+    renderCampaigns(document.getElementById("campaignGrid"), themes, segmentKey, objectiveKey);
+    renderCalendar(document.getElementById("calendarTable"), themes, seed);
+
+    docketNoEl.textContent = String(docketCounter++).padStart(4, "0");
+
+    const results = document.getElementById("results");
+    results.classList.remove("is-hidden");
+
+    // restart stamp animation
+    const stamp = document.getElementById("resultsStamp");
+    stamp.style.animation = "none";
+    void stamp.offsetWidth;
+    stamp.style.animation = "";
+
+    results.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+});
+
+</script>
+</body>
+</html>
