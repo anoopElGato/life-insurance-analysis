@@ -25,3 +25,6 @@ Thumbs.db
 
 # Local database / embedding stores
 .chroma/
+*.sqlite3
+*.db
+*.log
