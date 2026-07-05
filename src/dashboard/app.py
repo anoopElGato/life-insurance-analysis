@@ -421,56 +421,163 @@ class Dashboard:
         return [
             {
                 "id": "term-vs-whole",
-                "title": "Term vs whole life confusion",
-                "keywords": ["term life", "whole life", "permanent life", "difference between", "which policy"],
-                "why": "A high-intent clarification topic that tends to spark strong engagement.",
+                "title": "Term vs. whole life confusion",
+                "keywords": ["term life", "whole life", "permanent life", "which policy", "difference between", "confused about"],
+                "why": "The single most-searched point of confusion in the category — reliable engagement bait when explained simply.",
                 "content_hook": "Make the choice feel simple in 30 seconds."
             },
             {
-                "id": "retirement-planning",
-                "title": "Retirement planning anxiety",
-                "keywords": ["retirement", "retire", "future income", "financial freedom", "post retirement"],
-                "why": "People often respond well when complex coverage is translated into a personal future-state story.",
-                "content_hook": "Turn retirement anxiety into a proactive planning moment."
+                "id": "gig-income",
+                "title": "Coverage for gig and creator income",
+                "keywords": ["gig worker", "freelance", "creator economy", "side hustle", "self employed", "1099", "no employer benefits"],
+                "why": "Traditional life insurance marketing still assumes a W-2 job — content that acknowledges gig income earns outsized interest.",
+                "content_hook": "Position the brand as the benefits department gig workers never had."
             },
             {
-                "id": "family-protection",
-                "title": "Family protection and dependents",
-                "keywords": ["family", "dependent", "children", "parents", "home", "protect my family"],
-                "why": "Emotionally grounded messaging often performs well when it is specific and practical.",
-                "content_hook": "Anchor the value in care, not fear."
+                "id": "grief-finances",
+                "title": "Grief-proofing your family's finances",
+                "keywords": ["grief", "loss of a loved one", "funeral costs", "what happens if i die", "family after i'm gone", "final expenses"],
+                "why": "Emotionally resonant and rarely addressed head-on by competitors — differentiated ground if handled with care.",
+                "content_hook": "Reframe coverage as removing logistical weight from grief."
             },
             {
-                "id": "claim-process",
-                "title": "Claim process clarity",
-                "keywords": ["claim", "claims", "settlement", "process", "payout", "beneficiary"],
-                "why": "Trust rises when the policy experience feels visible and understandable.",
-                "content_hook": "Show the journey instead of promising a vague outcome."
+                "id": "retirement-gap",
+                "title": "The retirement income gap",
+                "keywords": ["retirement income", "outliving savings", "pension gap", "401k shortfall", "retire early", "income gap"],
+                "why": "Rising concern among pre-retirees as pensions disappear — high-intent audience actively researching solutions.",
+                "content_hook": "Replace vague retirement anxiety with one concrete number."
             },
             {
-                "id": "cost-and-value",
-                "title": "Cost and value conversation",
-                "keywords": ["cost", "premium", "affordable", "value", "price", "budget"],
-                "why": "A practical price-value frame keeps the conversation grounded in real-world decision-making.",
-                "content_hook": "Make affordability feel relatable and immediate."
+                "id": "kids-education",
+                "title": "Locking in your kids' future costs",
+                "keywords": ["child education", "college fund", "kids future", "education costs", "save for college", "new parent"],
+                "why": "New-parent audiences over-index on planning content shared within family networks.",
+                "content_hook": "Frame early coverage as a financial hedge against future cost inflation."
             },
             {
-                "id": "digital-convenience",
-                "title": "Digital convenience and speed",
-                "keywords": ["digital", "online", "fast", "paperless", "easy", "instant"],
-                "why": "Speed and convenience are strong differentiators when they are framed as reduced effort.",
-                "content_hook": "Turn frictionless service into a clear benefit."
+                "id": "women-independence",
+                "title": "Women building financial independence",
+                "keywords": ["women and money", "financial independence", "gender pay gap", "single income woman", "women investing"],
+                "why": "Growing, underserved content niche — competitors mostly market to households, not individual women directly.",
+                "content_hook": "Speak to women as primary financial decision-makers, not dependents."
+            },
+            {
+                "id": "debt-protection",
+                "title": "Debt doesn't disappear when you do",
+                "keywords": ["debt", "mortgage protection", "co-signed loan", "student loan death", "who pays my debt"],
+                "why": "A blunt, high-clarity angle that performs well as a pattern interrupt in feeds full of soft lifestyle content.",
+                "content_hook": "Use the blunt truth about debt transfer as a wake-up-call entry point."
+            },
+            {
+                "id": "ai-claims-speed",
+                "title": "Faster claims, less paperwork",
+                "keywords": ["claims process", "how long do claims take", "paperwork", "digital claims", "ai underwriting", "instant approval"],
+                "why": "Operational-trust content performs well post-purchase and counters the industry's reputation for slow claims.",
+                "content_hook": "Build trust by making the claims process visible and specific."
+            },
+            {
+                "id": "tax-advantage",
+                "title": "Tax-advantaged uses of life insurance",
+                "keywords": ["tax free", "tax advantage", "estate planning", "cash value", "tax efficient", "wealth transfer"],
+                "why": "High-value topic for HNW audiences — dense but converts well when simplified into scenarios.",
+                "content_hook": "Position coverage as a legitimate estate and tax planning tool."
+            },
+            {
+                "id": "mental-health-money",
+                "title": "Financial stress and mental health",
+                "keywords": ["financial stress", "money anxiety", "mental health", "financial wellbeing", "money worry"],
+                "why": "Cross-category topic with strong organic reach — connects protection planning to a broader wellbeing conversation.",
+                "content_hook": "Sell peace of mind as a mental-health outcome, not a financial product feature."
+            },
+            {
+                "id": "bundled-health",
+                "title": "Bundling life and health coverage",
+                "keywords": ["bundle", "health insurance", "combined coverage", "life and health", "package plan"],
+                "why": "Practical, cost-driven angle that resonates during open-enrollment adjacent periods.",
+                "content_hook": "Use cost-consolidation as a low-friction reason to open a policy review conversation."
+            },
+            {
+                "id": "climate-longevity",
+                "title": "Longer lifespans, longer plans",
+                "keywords": ["life expectancy", "longevity", "living longer", "climate risk", "outlive your plan"],
+                "why": "Emerging long-horizon topic — early-mover content advantage while most competitors have not touched it yet.",
+                "content_hook": "Use rising life expectancy as a fresh, optimistic reason to revisit coverage assumptions."
+            },
+            {
+                "id": "creator-economy-risk",
+                "title": "Protecting a personal brand's income",
+                "keywords": ["personal brand", "influencer income", "content creator", "brand deals", "youtube income"],
+                "why": "Fast-growing, under-addressed niche as more of the workforce monetizes personal audiences directly.",
+                "content_hook": "Speak directly to creators about protecting monetized personal brands."
+            },
+            {
+                "id": "myths-mythbusting",
+                "title": "Busting the 'it's too expensive' myth",
+                "keywords": ["too expensive", "can't afford", "life insurance cost", "myth", "misconception"],
+                "why": "Consistently one of the highest-performing evergreen formats in the category — cost perception, not cost reality, is the barrier.",
+                "content_hook": "Anchor the cost conversation to a relatable daily spend comparison."
+            },
+            {
+                "id": "family-story",
+                "title": "Real family protection stories",
+                "keywords": ["real story", "customer story", "policyholder", "family protected", "testimonial"],
+                "why": "Trust-building social proof — outperforms product-forward content on conversion in retargeting.",
+                "content_hook": "Let a single specific story carry the proof burden instead of brand claims."
+            },
+            {
+                "id": "beneficiary-mistakes",
+                "title": "Beneficiary mistakes people don't notice",
+                "keywords": ["beneficiary", "outdated policy", "forgot to update", "ex spouse policy", "policy review"],
+                "why": "Low-competition, high-utility topic that drives existing-policyholder engagement and retention.",
+                "content_hook": "Turn a mundane policy-hygiene task into a proactive retention touchpoint."
+            },
+            {
+                "id": "young-adult-first-policy",
+                "title": "Buying your first policy in your 20s",
+                "keywords": ["first policy", "buy life insurance young", "insurance in my 20s", "early coverage"],
+                "why": "Category-education content aimed at first-time buyers, positioned to capture long-term customer value early.",
+                "content_hook": "Frame early purchase as a financial optimization, not a morbid milestone."
+            },
+            {
+                "id": "policy-comparison-tools",
+                "title": "Making quotes easy to compare",
+                "keywords": ["compare quotes", "which company", "insurance comparison", "shopping for insurance", "get a quote"],
+                "why": "High commercial intent — audiences actively in a buying window respond well to comparison-format content.",
+                "content_hook": "Remove the friction and pressure people associate with getting a quote."
+            },
+            {
+                "id": "small-business-owner",
+                "title": "Coverage for small business owners",
+                "keywords": ["small business owner", "key person insurance", "business succession", "buy sell agreement"],
+                "why": "Under-marketed B2B-adjacent niche with high policy values and strong LinkedIn performance.",
+                "content_hook": "Address succession and key-person risk as a business continuity issue."
+            },
+            {
+                "id": "digital-first-experience",
+                "title": "No medical exam, fully digital signup",
+                "keywords": ["no medical exam", "digital signup", "online application", "instant quote", "app based"],
+                "why": "Convenience-led content that converts well against competitors still requiring in-person underwriting.",
+                "content_hook": "Make application speed itself the headline differentiator."
             },
         ]
 
     def _score_theme(self, theme, text_lower):
-        """Score a theme against a text input using keyword presence."""
+        """Score a theme against a text input using keyword presence and loose word matching."""
+        if not text_lower:
+            return 0
+
         score = 0
-        for keyword in theme["keywords"]:
+        for keyword in theme.get("keywords", []):
             if keyword in text_lower:
-                score += 3
+                score += 3 if " " in keyword else 2
+            else:
+                first_word = keyword.split(" ")[0]
+                if len(first_word) > 4 and first_word in text_lower:
+                    score += 1
+
         if any(token in text_lower for token in ["why", "how", "best", "compare", "cost", "claim", "retirement", "family"]):
             score += 1
+
         return score
 
     def _build_signal_results(self, raw_text, segment_key, objective_key):
@@ -531,6 +638,68 @@ class Dashboard:
             })
 
         return ledger, docket
+
+    def _build_fallback_signals(self, raw_text: str, segment_key: str, objective_key: str) -> List[Dict]:
+        """Generate a deterministic keyword-based signal set when Ollama is unavailable."""
+        segment_labels = {
+            "general": "general households",
+            "families": "young families",
+            "gig": "gig workers and creators",
+            "retirees": "retirees and pre-retirees",
+            "hnw": "high-net-worth households",
+            "women": "women building financial independence",
+        }
+        objective_labels = {
+            "awareness": "awareness",
+            "education": "education",
+            "leadgen": "lead generation",
+            "retention": "retention",
+            "trust": "trust",
+        }
+
+        text_lower = (raw_text or "").lower()
+        themes = self._build_theme_catalog()
+        scored_themes = []
+
+        for theme in themes:
+            raw = self._score_theme(theme, text_lower)
+            if raw > 0:
+                scored_themes.append(theme | {"raw": raw})
+
+        if not scored_themes:
+            scored_themes = [theme | {"raw": 0} for theme in themes[:4]]
+
+        scored_themes = sorted(scored_themes, key=lambda item: item["raw"], reverse=True)
+        matched = scored_themes[:5]
+        max_raw = max((item["raw"] for item in matched), default=1)
+
+        results = []
+        for index, item in enumerate(matched):
+            raw = item["raw"]
+            if raw > 0:
+                pct = max(38, min(97, round(48 + (raw / (max_raw + 2)) * 48)))
+            else:
+                pct = max(38, min(97, round(70 - index * 9)))
+
+            if pct >= 78:
+                momentum = "PEAKING"
+            elif pct >= 55:
+                momentum = "RISING"
+            else:
+                momentum = "STEADY"
+
+            results.append({
+                "title": item["title"],
+                "signal": item["why"],
+                "strength": pct,
+                "momentum": momentum,
+                "hook": f"{item['content_hook']} for {segment_labels.get(segment_key, 'your audience')}.",
+                "format": "Short-form video" if index < 2 else "Email nurture",
+                "channel": "Instagram / TikTok" if index < 2 else "Email / LinkedIn",
+                "caption": f"Frame this around {objective_labels.get(objective_key, 'awareness')} and make the point feel immediately useful.",
+            })
+
+        return results
 
     def _render_signal_ledger(self, signals: List[Dict]) -> str:
         rows = []
@@ -717,14 +886,16 @@ class Dashboard:
                 prompt = _build_signal_prompt(source_text, segment_key, objective_key)
                 raw_response = self.llm.generate(prompt)
                 signals = _parse_signal_response(raw_response)
+                using_fallback = False
 
                 if not signals:
-                    st.error("The local model did not return valid signal output. Check that Ollama is running and the model is available.")
-                    st.write("Raw response:")
-                    st.code(raw_response)
-                    return
+                    signals = self._build_fallback_signals(source_text, segment_key, objective_key)
+                    using_fallback = True
 
                 signals = sorted(signals, key=lambda item: item.get("strength", 0), reverse=True)
+
+                if using_fallback:
+                    st.info("Ollama was not reachable, so the app used its built-in signal generator. For richer AI output, connect a hosted LLM API instead of a localhost Ollama server.")
 
                 html_output = self._build_open_file_html(signals)
                 components.html(html_output, height=780, scrolling=True)
