@@ -1,3 +1,5 @@
+# Python 3.11 requirement
+# Requires Python 3.11.x
 python-dotenv==1.0.0
 requests==2.31.0
 beautifulsoup4==4.12.0
