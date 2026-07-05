@@ -815,12 +815,12 @@ class Dashboard:
         
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("🔽 Open the Ledger", use_container_width=True, key="btn_ledger"):
+            if st.button("🔽 Main Menu", use_container_width=True, key="btn_ledger"):
                 st.session_state.current_page = "dashboard"
                 st.rerun()
         
         with col2:
-            if st.button("📊 See the data sources", use_container_width=True, key="btn_data"):
+            if st.button("📊 Data Sources", use_container_width=True, key="btn_data"):
                 st.session_state.current_page = "data_management"
                 st.rerun()
         
@@ -937,11 +937,11 @@ class Dashboard:
             st.session_state.current_page = "competitor_benchmark"
             st.rerun()
         
-        if st.sidebar.button("💬 Reviews Analysis", use_container_width=True):
+        if st.sidebar.button("💬 Review Analysis", use_container_width=True):
             st.session_state.current_page = "reviews_analysis"
             st.rerun()
 
-        if st.sidebar.button("📂 Open the Signal Lab", use_container_width=True):
+        if st.sidebar.button("📂 Content Docket", use_container_width=True):
             st.session_state.current_page = "open_file"
             st.rerun()
         
